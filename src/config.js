@@ -16,4 +16,4 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
-export const root = firebase.database();
+export default firebaseConfig
