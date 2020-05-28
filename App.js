@@ -15,11 +15,12 @@ const AuthStack = createStackNavigator({
 })
 
 export default createAppContainer(
-  createSwitchNavigator({
-    Splash: Splash,
-    App: AppStack,
-    Auth: AuthStack
-  },
+  createSwitchNavigator(
+    {
+      Splash: Splash,
+      App: AppStack,
+      Auth: AuthStack
+    },
     {
       initialRouteName: "Splash"
     }
