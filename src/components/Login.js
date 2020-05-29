@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Text, TextInput, Button } from 'react-native'
+import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity } from 'react-native'
 import firebase from 'firebase'
 
 class Login extends React.Component {
@@ -26,30 +26,52 @@ class Login extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>Login</Text>
+                <Image
+                    source={require('../../assets/top-circle.png')}
+                    style={styles.topCircle}
+                />
+                <Text style={styles.greeting}>{`Hello again,\nWelcome to Scheduler`}</Text>
                 {this.state.errorMessage &&
-                    <Text style={{ color: 'red' }}>
+                    <Text style={styles.errorMessage}>
                         {this.state.errorMessage}
                     </Text>}
-                <TextInput
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    placeholder="Email"
-                    onChangeText={email => this.setState({ email })}
-                    value={this.state.email}
-                />
-                <TextInput
-                    secureTextEntry
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    placeholder="Password"
-                    onChangeText={password => this.setState({ password })}
-                    value={this.state.password}
-                />
-                <Button title="Login" onPress={this.handleLogin} />
-                <Button
-                    title="Don't have an account? Sign Up"
-                    onPress={() => this.props.navigation.navigate('Register')}
+                <View style={styles.form}>
+                    <Text style={styles.inputTitle}>Email Address</Text>
+                    <TextInput
+                        style={styles.textInput}
+                        autoCapitalize="none"
+                        placeholder="Email"
+                        onChangeText={email => this.setState({ email })}
+                        value={this.state.email}
+                    />
+                    <Text style={styles.inputTitle}>Password</Text>
+                    <TextInput
+                        secureTextEntry
+                        style={styles.textInput}
+                        autoCapitalize="none"
+                        placeholder="Password"
+                        onChangeText={password => this.setState({ password })}
+                        value={this.state.password}
+                    />
+                    <TouchableOpacity
+                        style={styles.loginBtn}
+                        onPress={this.handleLogin} >
+                        <Text style={styles.loginText}>
+                            Login
+                    </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.registerBtn}
+                        onPress={() => this.props.navigation.navigate('Register')}
+                    >
+                        <Text style={styles.registerTop}>Don't have an account?
+                            <Text style={styles.registerBot}> Sign Up</Text>
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                <Image
+                    source={require('../../assets/bot-circle.png')}
+                    style={styles.botCircle}
                 />
             </View>
         )
@@ -58,16 +80,86 @@ class Login extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
+        flex: 1
+    },
+    greeting: {
+        fontFamily: "Montserrat",
+        fontSize: 18,
+        fontWeight: "400",
+        textAlign: "center",
+        color: "#000",
+        letterSpacing: 1.2,
+        marginTop: 130,
+        marginBottom: 30,
+        lineHeight: 24
+    },
+    errorMessage: {
+        textAlign: "center",
+        marginHorizontal: 30,
+        color: "red",
+        marginBottom: 20,
+        marginTop: -10
+    },
+    form: {
+        marginBottom: 48,
+        marginHorizontal: 30
+    },
+    inputTitle: {
+        color: "#000",
+        fontSize: 10,
+        textTransform: "uppercase"
     },
     textInput: {
+        borderBottomColor: "#000",
+        borderBottomWidth: StyleSheet.hairlineWidth,
         height: 40,
-        width: '90%',
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginTop: 8
+        fontSize: 15,
+        color: "#161F30",
+        marginBottom: 24
+    },
+    loginBtn: {
+        height: 40,
+        backgroundColor: "#6861CF",
+        borderRadius: 4,
+        marginTop: -4,
+        elevation: 2,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    loginText: {
+        fontFamily: "Montserrat",
+        color: "#fff",
+        fontSize: 18,
+        textAlign: "center",
+        fontWeight: "600",
+    },
+    registerBtn: {
+        alignSelf: "center", marginTop: 16
+    },
+    registerTop: {
+        color: "#414959",
+        fontSize: 14,
+        fontFamily: "Montserrat"
+    },
+    registerBot: {
+        color: "#6861CF",
+        fontSize: 14,
+        fontFamily: "Montserrat",
+        fontWeight: "bold"
+    },
+    topCircle: {
+        position: "absolute",
+        top: 0,
+        right: 0,
+        marginTop: -140,
+        marginRight: -90
+    },
+    botCircle: {
+        position: "relative",
+        bottom: 0,
+        left: 0,
+        marginBottom: -120,
+        marginLeft: -70
     }
 });
 
