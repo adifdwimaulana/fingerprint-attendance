@@ -1,7 +1,7 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+import React from 'react';
+import { View, Text } from 'react-native';
 
-class AddData extends React.Component {
+class Data extends React.Component {
     componentDidMount() {
         console.log("Data");
     }
@@ -14,4 +14,4 @@ class AddData extends React.Component {
     }
 }
 
-export default AddData
+export default Data;

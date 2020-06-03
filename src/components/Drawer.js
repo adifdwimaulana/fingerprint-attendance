@@ -2,7 +2,7 @@ import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import HomeStack from '../routes/homeStack';
-import AddDataStack from '../routes/addDataStack';
+import DataStack from '../routes/dataStack';
 import LogoutStack from '../routes/logoutStack';
 
 const RootDrawerNavigator = createDrawerNavigator(
@@ -11,7 +11,7 @@ const RootDrawerNavigator = createDrawerNavigator(
             screen: HomeStack
         },
         Data: {
-            screen: AddDataStack
+            screen: DataStack
         },
         Logout: {
             screen: LogoutStack
