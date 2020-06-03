@@ -3,7 +3,7 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import HomeStack from '../routes/homeStack';
 import AddDataStack from '../routes/addDataStack';
-import DrawerComponent from './DrawerComponent';
+import LogoutStack from '../routes/logoutStack';
 
 const RootDrawerNavigator = createDrawerNavigator(
     {
@@ -12,6 +12,9 @@ const RootDrawerNavigator = createDrawerNavigator(
         },
         Data: {
             screen: AddDataStack
+        },
+        Logout: {
+            screen: LogoutStack
         }
     }
 );

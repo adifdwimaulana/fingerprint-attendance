@@ -1,11 +1,15 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import Dashboard from '../components/Dashboard';
+import Header from '../components/Header';
+import React from 'react';
 
 const screens = {
     Home: {
         screen: Dashboard,
-        navigationOptions: {
-            title: 'Dashboard'
+        navigationOptions: ({ navigation }) => {
+            return {
+                headerTitle: () => <Header navigation={navigation} />,
+            }
         }
     },
 }
