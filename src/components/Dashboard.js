@@ -42,25 +42,38 @@ class Dashboard extends React.Component {
                 <Text style={styles.title}>Jadwal</Text>
                 <Text style={styles.date}>{day}, {date}</Text>
                 {/* Jadwal Section */}
-                <View style={styles.jadwalContainerSatu}>
-                    <Text style={styles.jadwalTitle}>Workshop Pemrograman</Text>
-                    <Text style={styles.jadwalTime}>08.00 - 10.00 A.M.</Text>
-                    <Text style={styles.jadwalRuangan}>JJ208</Text>
-                    <View style={styles.dosenGroup}>
-                        <Icon name='user' size={24} style={styles.icon} />
-                        <Text style={styles.dosen}>Adif Dwi Maulana</Text>
+                <View style={styles.jadwalContainer}>
+                    <View style={styles.jadwalContainerSatu}>
+                        <Text style={styles.jadwalTitle}>Workshop Pemrograman</Text>
+                        <Text style={styles.jadwalTime}>08.00 - 10.00 A.M.</Text>
+                        <Text style={styles.jadwalRuangan}>JJ208</Text>
+                        <View style={styles.dosenGroup}>
+                            <Icon name='user' size={24} style={styles.icon} />
+                            <Text style={styles.dosen}>Adif Dwi Maulana</Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.jadwalContainerDua}>
+                        <Text style={styles.jadwalTitle}>Pengantar Mekatronika</Text>
+                        <Text style={styles.jadwalTime}>08.00 - 10.00 A.M.</Text>
+                        <Text style={styles.jadwalRuangan}>JJ209</Text>
+                        <View style={styles.dosenGroup}>
+                            <Icon name='user' size={24} style={styles.icon} />
+                            <Text style={styles.dosen}>Endra Pitowarno</Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.jadwalContainerSatu}>
+                        <Text style={styles.jadwalTitle}>Workshop Pemrograman</Text>
+                        <Text style={styles.jadwalTime}>08.00 - 10.00 A.M.</Text>
+                        <Text style={styles.jadwalRuangan}>JJ208</Text>
+                        <View style={styles.dosenGroup}>
+                            <Icon name='user' size={24} style={styles.icon} />
+                            <Text style={styles.dosen}>Adif Dwi Maulana</Text>
+                        </View>
                     </View>
                 </View>
 
-                <View style={styles.jadwalContainerDua}>
-                    <Text style={styles.jadwalTitle}>Pengantar Mekatronika</Text>
-                    <Text style={styles.jadwalTime}>08.00 - 10.00 A.M.</Text>
-                    <Text style={styles.jadwalRuangan}>JJ209</Text>
-                    <View style={styles.dosenGroup}>
-                        <Icon name='user' size={24} style={styles.icon} />
-                        <Text style={styles.dosen}>Endra Pitowarno</Text>
-                    </View>
-                </View>
             </ScrollView>
         )
     }
@@ -86,6 +99,9 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontWeight: "600",
         letterSpacing: 1.5
+    },
+    jadwalContainer: {
+        marginBottom: 50
     },
     jadwalContainerSatu: {
         marginHorizontal: 17,
