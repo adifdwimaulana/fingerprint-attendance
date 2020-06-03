@@ -9,10 +9,11 @@ import Home from './src/components/Home'
 
 console.disableYellowBox = true;
 
+
 const Stack = createStackNavigator(
   {
     Login,
-    Register
+    Register,
   },
 )
 
@@ -20,7 +21,7 @@ const Switch = createSwitchNavigator(
   {
     Home,
     Splash,
-    Stack
+    Stack,
   },
   {
     initialRouteName: 'Splash'
