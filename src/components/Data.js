@@ -1,45 +1,38 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-class Data extends React.Component {
-    componentDidMount() {
-        console.log("Data");
-    }
 
-    formMatkul() {
-        console.log("Form Matkul");
-    }
-
-    formDosen() {
-        console.log("Form Dosen");
-    }
-
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.title}>Tambah Data</Text>
-                <View style={styles.imageContainer}>
-                    <View style={styles.containerMatkul}>
-                        <Image source={require('../../assets/mata-kuliah-1.png')} style={styles.imageMatkul} />
-                        <TouchableOpacity onPress={this.formMatkul}>
-                            <Text style={styles.tambah}>Mata Kuliah</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.containerDosen}>
-                        <Image source={require('../../assets/dosen-1.png')} style={styles.imageDosen} />
-                        <TouchableOpacity onPress={this.formDosen}>
-                            <Text style={styles.tambah}>Dosen</Text>
-                        </TouchableOpacity>
-                    </View>
+function Data({ navigation }) {
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Tambah Data</Text>
+            <View style={styles.imageContainer}>
+                <View style={styles.containerMatkul}>
+                    <Image source={require('../../assets/mata-kuliah-1.png')} style={styles.imageMatkul} />
+                    <TouchableOpacity onPress={() => navigation.navigate('FormMataKuliah')}>
+                        <Text style={styles.tambah}>Mata Kuliah</Text>
+                    </TouchableOpacity>
                 </View>
-                <Image
-                    source={require('../../assets/bot-circle.png')}
-                    style={styles.botCircle}
-                />
+                <View style={styles.containerDosen}>
+                    <Image source={require('../../assets/dosen-1.png')} style={styles.imageDosen} />
+                    <TouchableOpacity onPress={() => navigation.navigate('FormDosen')}>
+                        <Text style={styles.tambah}>Dosen</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        )
-    }
+            <Image
+                source={require('../../assets/bot-circle.png')}
+                style={styles.botCircle}
+            />
+        </View>
+    )
 }
+
+Data['navigationOptions'] = props => ({
+    header: null
+})
+
+export default Data;
 
 const styles = StyleSheet.create({
     container: {
@@ -101,6 +94,4 @@ const styles = StyleSheet.create({
         marginBottom: -100,
         marginLeft: -70
     }
-})
-
-export default Data;
+});

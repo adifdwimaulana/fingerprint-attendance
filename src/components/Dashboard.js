@@ -11,7 +11,8 @@ class Dashboard extends React.Component {
         this.state = {
             day: '',
             date: '',
-            data: null
+            dataOdd: null,
+            dataEven: null
         }
     }
 
@@ -35,7 +36,7 @@ class Dashboard extends React.Component {
     }
 
     render() {
-        const { day, date, data } = this.state;
+        const { day, date, dataOdd, dataEven } = this.state;
         return (
             <ScrollView style={styles.container}>
                 {/* Title Section */}

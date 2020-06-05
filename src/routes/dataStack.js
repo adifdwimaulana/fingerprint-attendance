@@ -1,11 +1,11 @@
 import { createStackNavigator } from 'react-navigation-stack';
-import Data from '../components/Data';
+import DataNavigation from '../components/DataNavigation';
 import Header from '../components/Header';
 import React from 'react';
 
 const screens = {
     Data: {
-        screen: Data,
+        screen: DataNavigation,
         navigationOptions: ({ navigation }) => {
             return {
                 headerTitle: () => <Header navigation={navigation} />,

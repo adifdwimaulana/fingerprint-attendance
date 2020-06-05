@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import fireabse from 'firebase';
 
-class FormMataKuliah extends React.Component {
+class FormDosen extends React.Component {
     static navigationOptions = { header: null }
     render() {
         const { navigation } = this.props;
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default FormMataKuliah;
+export default FormDosen;

@@ -9,7 +9,6 @@ import Home from './src/components/Home'
 
 console.disableYellowBox = true;
 
-
 const Stack = createStackNavigator(
   {
     Login,
