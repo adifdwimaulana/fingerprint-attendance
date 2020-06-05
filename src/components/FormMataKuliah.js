@@ -25,7 +25,7 @@ class FormMataKuliah extends React.Component {
         const { navigation } = this.props;
         return (
             <View style={styles.container}>
-                <Text>Input Data</Text>
+                <Text style={styles.title}>Input Data Mata Kuiah</Text>
                 <View style={styles.form}>
                     <Text style={styles.inputTitle}>Mata Kuliah</Text>
                     <TextInput
@@ -61,6 +61,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
     },
+    title: {
+        marginTop: 40,
+        marginBottom: 40,
+        fontSize: 24,
+        fontWeight: '700',
+        textAlign: 'center',
+        letterSpacing: 1,
+        color: '#000'
+    },
     form: {
         marginBottom: 48,
         marginHorizontal: 30
@@ -82,7 +91,7 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: "#6861CF",
         borderRadius: 4,
-        marginTop: -4,
+        marginTop: 6,
         elevation: 2,
         alignItems: "center",
         justifyContent: "center"
