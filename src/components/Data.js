@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-
 function Data({ navigation }) {
     return (
         <View style={styles.container}>
