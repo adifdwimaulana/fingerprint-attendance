@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native';
 import SearchableDropdown from 'react-native-searchable-dropdown';
-import fireabse from 'firebase';
+import firebase from 'firebase';
 
 const items = [
-    //name key is must.It is to show the text in front
     { id: 1, name: 'JJ208' },
     { id: 2, name: 'JJ209' },
 ];
+
+const dayArr = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu", "minggu"];
 
 class FormMataKuliah extends React.Component {
     constructor(props) {
@@ -25,14 +26,28 @@ class FormMataKuliah extends React.Component {
 
     static navigationOptions = { header: null }
 
-    handleSubmit() {
-        console.log("Sukses");
-        // this.props.navigation.navigate('Data')
+    handleSubmit(day, matkul, start, end, dosen, ruangan) {
+        let roomUrl = ruangan.id;
+        let roomName = ruangan.name;
+        let dayUrl = String(day);
+        dayUrl = dayUrl.toLowerCase();
+        console.log(dayUrl);
+        console.log(roomUrl);
+        let url = '/' + roomUrl + '/matkul/' + dayUrl;
+        console.log(url);
+
+        firebase.database().ref(url).push({
+            dosen,
+            nama: matkul,
+            start,
+            end,
+            ruangan: roomName
+        });
     }
 
     render() {
         const { navigation } = this.props;
-        const { day, matkul, start, end, ruangan } = this.state;
+        const { day, matkul, start, end, dosen, ruangan } = this.state;
         return (
             <ScrollView
                 keyboardShouldPersistTaps='always'
@@ -45,25 +60,39 @@ class FormMataKuliah extends React.Component {
                         autoCapitalize="none"
                         placeholder="Mata Kuliah"
                         onChangeText={matkul => this.setState({ matkul })}
-                        value={this.state.matkul}
+                        value={matkul}
                     />
                     <Text style={styles.inputTitle}>Hari</Text>
                     <TextInput
-                        secureTextEntry
                         style={styles.textInput}
                         autoCapitalize="none"
-                        placeholder="Hari"
+                        placeholder="Senin"
                         onChangeText={day => this.setState({ day })}
-                        value={this.state.day}
+                        value={day}
+                    />
+                    <Text style={styles.inputTitle}>Jam Mulai</Text>
+                    <TextInput
+                        style={styles.textInput}
+                        autoCapitalize="none"
+                        placeholder="08:00"
+                        onChangeText={start => this.setState({ start })}
+                        value={start}
+                    />
+                    <Text style={styles.inputTitle}>Jam Selesai</Text>
+                    <TextInput
+                        style={styles.textInput}
+                        autoCapitalize="none"
+                        placeholder="10:30"
+                        onChangeText={end => this.setState({ end })}
+                        value={end}
                     />
                     <Text style={styles.inputTitle}>Dosen</Text>
                     <TextInput
-                        secureTextEntry
                         style={styles.textInput}
                         autoCapitalize="none"
                         placeholder="Dosen"
                         onChangeText={dosen => this.setState({ dosen })}
-                        value={this.state.dosen}
+                        value={dosen}
                     />
                     <Text style={styles.inputTitle}>Ruangan</Text>
                     <SearchableDropdown
@@ -86,7 +115,7 @@ class FormMataKuliah extends React.Component {
                     />
                     <TouchableOpacity
                         style={styles.submitBtn}
-                        onPress={this.handleSubmit} >
+                        onPress={() => this.handleSubmit(day, matkul, start, end, dosen, ruangan)} >
                         <Text style={styles.submitText}>
                             Submit
                     </Text>

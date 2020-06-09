@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import SeachableDropdown from 'react-native-searchable-dropdown';
 import fireabse from 'firebase';
 
 class FormDosen extends React.Component {
@@ -9,8 +10,12 @@ class FormDosen extends React.Component {
         this.state = {
             id: null,
             nama: '',
-            nip: ''
+            nip: '',
         }
+    }
+
+    componentDidMount() {
+
     }
 
     static navigationOptions = { header: null }

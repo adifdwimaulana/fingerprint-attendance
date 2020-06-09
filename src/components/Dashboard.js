@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import firebase from 'firebase';
 
 const dayArray = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
@@ -30,9 +31,16 @@ class Dashboard extends React.Component {
             month = '0' + month;
         }
 
-        const currentDay = dayArray[day - 1];
-        const today = date + '-' + month + '-' + year;
+        let currentDay = dayArray[day - 1];
+        let today = date + '-' + month + '-' + year;
         this.setState({ day: currentDay, date: today })
+
+        let dayUrl = currentDay.toLowerCase();
+        console.log(dayUrl)
+        firebase.database().ref('/1/matkul/' + dayUrl).on('value', (snap) => {
+            let data = snap.val();
+            console.log(data);
+        })
     }
 
     render() {
@@ -54,6 +62,16 @@ class Dashboard extends React.Component {
                         </View>
                     </View>
 
+                    <View style={styles.jadwalContainerSatu}>
+                        <Text style={styles.jadwalTitle}>Workshop Pemrograman</Text>
+                        <Text style={styles.jadwalTime}>08.00 - 10.00 A.M.</Text>
+                        <Text style={styles.jadwalRuangan}>JJ208</Text>
+                        <View style={styles.dosenGroup}>
+                            <Icon name='user' size={24} style={styles.icon} />
+                            <Text style={styles.dosen}>Adif Dwi Maulana</Text>
+                        </View>
+                    </View>
+
                     <View style={styles.jadwalContainerDua}>
                         <Text style={styles.jadwalTitle}>Pengantar Mekatronika</Text>
                         <Text style={styles.jadwalTime}>08.00 - 10.00 A.M.</Text>
@@ -64,15 +82,7 @@ class Dashboard extends React.Component {
                         </View>
                     </View>
 
-                    <View style={styles.jadwalContainerSatu}>
-                        <Text style={styles.jadwalTitle}>Workshop Pemrograman</Text>
-                        <Text style={styles.jadwalTime}>08.00 - 10.00 A.M.</Text>
-                        <Text style={styles.jadwalRuangan}>JJ208</Text>
-                        <View style={styles.dosenGroup}>
-                            <Icon name='user' size={24} style={styles.icon} />
-                            <Text style={styles.dosen}>Adif Dwi Maulana</Text>
-                        </View>
-                    </View>
+
                 </View>
 
             </ScrollView>
