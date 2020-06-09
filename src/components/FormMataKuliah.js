@@ -1,6 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native';
+import SearchableDropdown from 'react-native-searchable-dropdown';
 import fireabse from 'firebase';
+
+const items = [
+    //name key is must.It is to show the text in front
+    { id: 1, name: 'JJ208' },
+    { id: 2, name: 'JJ209' },
+];
 
 class FormMataKuliah extends React.Component {
     constructor(props) {
@@ -10,7 +17,9 @@ class FormMataKuliah extends React.Component {
             day: '',
             matkul: '',
             start: '',
-            end: ''
+            end: '',
+            dosen: '',
+            ruangan: ''
         }
     }
 
@@ -23,8 +32,11 @@ class FormMataKuliah extends React.Component {
 
     render() {
         const { navigation } = this.props;
+        const { day, matkul, start, end, ruangan } = this.state;
         return (
-            <View style={styles.container}>
+            <ScrollView
+                keyboardShouldPersistTaps='always'
+                style={styles.container}>
                 <Text style={styles.title}>Input Data Mata Kuiah</Text>
                 <View style={styles.form}>
                     <Text style={styles.inputTitle}>Mata Kuliah</Text>
@@ -44,6 +56,34 @@ class FormMataKuliah extends React.Component {
                         onChangeText={day => this.setState({ day })}
                         value={this.state.day}
                     />
+                    <Text style={styles.inputTitle}>Dosen</Text>
+                    <TextInput
+                        secureTextEntry
+                        style={styles.textInput}
+                        autoCapitalize="none"
+                        placeholder="Dosen"
+                        onChangeText={dosen => this.setState({ dosen })}
+                        value={this.state.dosen}
+                    />
+                    <Text style={styles.inputTitle}>Ruangan</Text>
+                    <SearchableDropdown
+                        onTextChange={text => console.log(text)}
+                        // onItemSelect={item => alert(JSON.stringify(item))}
+                        onItemSelect={item => this.setState({ ruangan: item })}
+                        textInputStyle={{
+                            borderBottomColor: "#000",
+                            borderBottomWidth: StyleSheet.hairlineWidth,
+                        }}
+                        itemStyle={styles.itemStyle}
+                        itemTextStyle={{
+                            color: '#222',
+                        }}
+                        items={items}
+                        defaultIndex={2}
+                        placeholder="Masukkan Ruangan"
+                        resetValue={false}
+                        underlineColorAndroid="transparent"
+                    />
                     <TouchableOpacity
                         style={styles.submitBtn}
                         onPress={this.handleSubmit} >
@@ -52,7 +92,7 @@ class FormMataKuliah extends React.Component {
                     </Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </ScrollView>
         )
     }
 }
@@ -103,6 +143,14 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontWeight: "600",
     },
+    itemStyle: {
+        padding: 10,
+        marginTop: 2,
+        backgroundColor: '#FAF9F8',
+        borderColor: '#bbb',
+        borderBottomColor: "#000",
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    }
 })
 
 export default FormMataKuliah;
