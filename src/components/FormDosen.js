@@ -1,7 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-import SeachableDropdown from 'react-native-searchable-dropdown';
-import fireabse from 'firebase';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import SearchableDropdown from 'react-native-searchable-dropdown';
+import firebase from 'firebase';
+
+const items = [
+    { id: 1, name: 'JJ208' },
+    { id: 2, name: 'JJ209' },
+];
+
+let ids = []
 
 class FormDosen extends React.Component {
     constructor(props) {
@@ -11,18 +18,24 @@ class FormDosen extends React.Component {
             id: null,
             nama: '',
             nip: '',
+            ruangan: ''
         }
     }
 
     componentDidMount() {
-
+        firebase.database().ref('/1/dosen').on('value', (snap) => {
+            let data = snap.val();
+            console.log(data);
+        })
     }
 
     static navigationOptions = { header: null }
     render() {
         const { navigation } = this.props;
         return (
-            <View style={styles.container}>
+            <ScrollView
+                keyboardShouldPersistTaps='always'
+                style={styles.container}>
                 <Text style={styles.title}>Input Data Dosen</Text>
                 <View style={styles.form}>
                     {this.state.id &&
@@ -45,6 +58,45 @@ class FormDosen extends React.Component {
                         onChangeText={nip => this.setState({ nip })}
                         value={this.state.nip}
                     />
+                    <Text style={styles.inputTitle}>Device</Text>
+                    <SearchableDropdown
+                        onTextChange={text => console.log(text)}
+                        // onItemSelect={item => alert(JSON.stringify(item))}
+                        onItemSelect={item => this.setState({ ruangan: item })}
+                        textInputStyle={{
+                            borderBottomColor: "#000",
+                            borderBottomWidth: StyleSheet.hairlineWidth,
+                            marginBottom: 24
+                        }}
+                        itemStyle={styles.itemStyle}
+                        itemTextStyle={{
+                            color: '#222',
+                        }}
+                        items={items}
+                        defaultIndex={2}
+                        placeholder="Pendaftaran dilakukan di Device"
+                        resetValue={false}
+                        underlineColorAndroid="transparent"
+                    />
+                    <Text style={styles.inputTitle}>ID Registrasi</Text>
+                    <SearchableDropdown
+                        onTextChange={text => console.log(text)}
+                        // onItemSelect={item => alert(JSON.stringify(item))}
+                        onItemSelect={item => this.setState({ id: item })}
+                        textInputStyle={{
+                            borderBottomColor: "#000",
+                            borderBottomWidth: StyleSheet.hairlineWidth,
+                        }}
+                        itemStyle={styles.itemStyle}
+                        itemTextStyle={{
+                            color: '#222',
+                        }}
+                        items={ids}
+                        defaultIndex={2}
+                        placeholder="1"
+                        resetValue={false}
+                        underlineColorAndroid="transparent"
+                    />
                     <TouchableOpacity
                         style={styles.submitBtn}
                         onPress={this.handleSubmit} >
@@ -53,7 +105,7 @@ class FormDosen extends React.Component {
                     </Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </ScrollView>
         )
     }
 }
@@ -112,6 +164,14 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontWeight: "600",
     },
+    itemStyle: {
+        padding: 10,
+        marginTop: 2,
+        backgroundColor: '#FAF9F8',
+        borderColor: '#bbb',
+        borderBottomColor: "#000",
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    }
 })
 
 export default FormDosen;

@@ -4,6 +4,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'firebase';
 
 const dayArray = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+let matkulOneArr = [];
+let matkulTwoArr = [];
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -12,8 +14,8 @@ class Dashboard extends React.Component {
         this.state = {
             day: '',
             date: '',
-            dataOdd: null,
-            dataEven: null
+            matkulOne: null,
+            matkulTwo: null
         }
     }
 
@@ -36,15 +38,41 @@ class Dashboard extends React.Component {
         this.setState({ day: currentDay, date: today })
 
         let dayUrl = currentDay.toLowerCase();
-        console.log(dayUrl)
-        firebase.database().ref('/1/matkul/' + dayUrl).on('value', (snap) => {
-            let data = snap.val();
-            console.log(data);
-        })
+        console.log(dayUrl);
+        firebase.database().ref('/1/matkul' + '/' + dayUrl).on('value', (snap) => {
+            matkulOneArr = [];
+            snap.forEach((item) => {
+                let itemVal = item.val();
+                let itemKey = item.key;
+                // console.log(itemKey);
+                // console.log(itemVal);
+                Object.assign(itemVal, { key: itemKey })
+                matkulOneArr.push(itemVal);
+                // console.log(matkulOneArr);
+                this.setState({ matkulOne: matkulOneArr })
+            });
+        });
+
+        firebase.database().ref('/2/matkul' + '/' + dayUrl).on('value', (snap) => {
+            matkulTwoArr = [];
+            snap.forEach((item) => {
+                let itemVal = item.val();
+                let itemKey = item.key;
+                // console.log(itemKey);
+                // console.log(itemVal);
+                Object.assign(itemVal, { key: itemKey })
+                matkulTwoArr.push(itemVal);
+                this.setState({ matkulTwo: matkulTwoArr })
+            });
+        });
     }
 
     render() {
-        const { day, date, dataOdd, dataEven } = this.state;
+        const { day, date, matkulOne, matkulTwo } = this.state;
+        console.log("Matkul One: ");
+        console.log(matkulOne);
+        console.log("Matkul Two: ");
+        console.log(matkulTwo);
         return (
             <ScrollView style={styles.container}>
                 {/* Title Section */}
@@ -52,39 +80,42 @@ class Dashboard extends React.Component {
                 <Text style={styles.date}>{day}, {date}</Text>
                 {/* Jadwal Section */}
                 <View style={styles.jadwalContainer}>
-                    <View style={styles.jadwalContainerSatu}>
-                        <Text style={styles.jadwalTitle}>Workshop Pemrograman</Text>
-                        <Text style={styles.jadwalTime}>08.00 - 10.00 A.M.</Text>
-                        <Text style={styles.jadwalRuangan}>JJ208</Text>
-                        <View style={styles.dosenGroup}>
-                            <Icon name='user' size={24} style={styles.icon} />
-                            <Text style={styles.dosen}>Adif Dwi Maulana</Text>
-                        </View>
-                    </View>
 
-                    <View style={styles.jadwalContainerSatu}>
-                        <Text style={styles.jadwalTitle}>Workshop Pemrograman</Text>
-                        <Text style={styles.jadwalTime}>08.00 - 10.00 A.M.</Text>
-                        <Text style={styles.jadwalRuangan}>JJ208</Text>
-                        <View style={styles.dosenGroup}>
-                            <Icon name='user' size={24} style={styles.icon} />
-                            <Text style={styles.dosen}>Adif Dwi Maulana</Text>
+                    {matkulOne ?
+                        matkulOne.map(item =>
+                            <View style={styles.jadwalContainerSatu}>
+                                <Text style={styles.jadwalTitle}>{item.nama}</Text>
+                                <Text style={styles.jadwalTime}>{item.start} - {item.end} A.M.</Text>
+                                <Text style={styles.jadwalRuangan}>{item.ruangan}</Text>
+                                <View style={styles.dosenGroup}>
+                                    <Icon name='user' size={24} style={styles.icon} />
+                                    <Text style={styles.dosen}>{item.dosen}</Text>
+                                </View>
+                            </View>
+                        ) : <View style={styles.noContainerSatu}>
+                            <Text style={styles.noKuliah}>Tidak Ada Kuliah</Text>
+                            <Text style={styles.noRuangan}>JJ208</Text>
                         </View>
-                    </View>
+                    }
 
-                    <View style={styles.jadwalContainerDua}>
-                        <Text style={styles.jadwalTitle}>Pengantar Mekatronika</Text>
-                        <Text style={styles.jadwalTime}>08.00 - 10.00 A.M.</Text>
-                        <Text style={styles.jadwalRuangan}>JJ209</Text>
-                        <View style={styles.dosenGroup}>
-                            <Icon name='user' size={24} style={styles.icon} />
-                            <Text style={styles.dosen}>Endra Pitowarno</Text>
+                    {matkulTwo ?
+                        matkulTwo.map(item =>
+                            <View style={styles.jadwalContainerDua}>
+                                <Text style={styles.jadwalTitle}>{item.nama}</Text>
+                                <Text style={styles.jadwalTime}>{item.start} - {item.end} A.M.</Text>
+                                <Text style={styles.jadwalRuangan}>{item.ruangan}</Text>
+                                <View style={styles.dosenGroup}>
+                                    <Icon name='user' size={24} style={styles.icon} />
+                                    <Text style={styles.dosen}>{item.dosen}</Text>
+                                </View>
+                            </View>
+                        ) : <View style={styles.noContainerDua}>
+                            <Text style={styles.noKuliah}>Tidak Ada Kuliah</Text>
+                            <Text style={styles.noRuangan}>JJ209</Text>
                         </View>
-                    </View>
-
+                    }
 
                 </View>
-
             </ScrollView>
         )
     }
@@ -156,7 +187,7 @@ const styles = StyleSheet.create({
     dosenGroup: {
         position: 'absolute',
         bottom: 6,
-        left: 200,
+        left: 185,
         flexDirection: 'row',
         alignItems: 'center'
     },
@@ -168,7 +199,38 @@ const styles = StyleSheet.create({
         marginLeft: 8,
         color: '#fff',
         fontWeight: '700',
-        letterSpacing: 1.2
+        letterSpacing: 1
+    },
+    noKuliah: {
+        fontSize: 24,
+        color: '#efefef',
+        fontWeight: '700',
+        letterSpacing: 1.2,
+        marginTop: 28,
+        textAlign: 'center'
+    },
+    noRuangan: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        marginTop: 8,
+        color: '#fff',
+        textAlign: 'center'
+    },
+    noContainerDua: {
+        marginHorizontal: 17,
+        marginTop: 30,
+        backgroundColor: '#6861cf',
+        height: 160,
+        borderRadius: 8,
+        elevation: 8,
+    },
+    noContainerSatu: {
+        marginHorizontal: 17,
+        marginTop: 30,
+        backgroundColor: '#d28e8e',
+        height: 160,
+        borderRadius: 8,
+        elevation: 8,
     }
 })
 

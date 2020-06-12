@@ -42,7 +42,11 @@ class FormMataKuliah extends React.Component {
             start,
             end,
             ruangan: roomName
-        });
+        })
+            .then(() => {
+                alert('Data berhasil di Tambahkan');
+                this.props.navigation.navigate('Home');
+            })
     }
 
     render() {
