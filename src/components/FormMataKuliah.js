@@ -10,6 +10,8 @@ const items = [
 
 const dayArr = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu", "minggu"];
 
+var dosenArr = [];
+
 class FormMataKuliah extends React.Component {
     constructor(props) {
         super(props);
@@ -44,9 +46,18 @@ class FormMataKuliah extends React.Component {
             ruangan: roomName
         })
             .then(() => {
-                alert('Data berhasil di Tambahkan');
-                this.props.navigation.navigate('Home');
+                this.setState({ day: '', matkul: '', start: '', end: '', dosen: '', ruangan: '' })
             })
+            .then(() => {
+                alert('Data berhasil di Tambahkan');
+                this.props.navigation.navigate('Data');
+            })
+    }
+
+    handleSelect(item) {
+        console.log(item);
+        // Push data Dosen to Array
+        this.setState({ ruangan: item });
     }
 
     render() {
@@ -90,19 +101,33 @@ class FormMataKuliah extends React.Component {
                         onChangeText={end => this.setState({ end })}
                         value={end}
                     />
-                    <Text style={styles.inputTitle}>Dosen</Text>
-                    <TextInput
-                        style={styles.textInput}
-                        autoCapitalize="none"
-                        placeholder="Dosen"
-                        onChangeText={dosen => this.setState({ dosen })}
-                        value={dosen}
-                    />
                     <Text style={styles.inputTitle}>Ruangan</Text>
                     <SearchableDropdown
                         onTextChange={text => console.log(text)}
                         // onItemSelect={item => alert(JSON.stringify(item))}
-                        onItemSelect={item => this.setState({ ruangan: item })}
+                        // onItemSelect={item => this.setState({ ruangan: item })}
+                        onItemSelect={item => this.handleRuangan(item)}
+                        textInputStyle={{
+                            borderBottomColor: "#000",
+                            borderBottomWidth: StyleSheet.hairlineWidth,
+                            marginBottom: 20
+                        }}
+                        itemStyle={styles.itemStyle}
+                        itemTextStyle={{
+                            color: '#222',
+                        }}
+                        items={items}
+                        defaultIndex={2}
+                        placeholder="Masukkan Ruangan"
+                        resetValue={false}
+                        underlineColorAndroid="transparent"
+                    />
+                    <Text style={styles.inputTitle}>Dosen</Text>
+                    <SearchableDropdown
+                        onTextChange={text => console.log(text)}
+                        // onItemSelect={item => alert(JSON.stringify(item))}
+                        // onItemSelect={item => this.setState({ ruangan: item })}
+                        onItemSelect={item => this.setState({ dosen: item })}
                         textInputStyle={{
                             borderBottomColor: "#000",
                             borderBottomWidth: StyleSheet.hairlineWidth,
