@@ -8,12 +8,16 @@ const items = [
     { id: 2, name: 'JJ209' },
 ];
 
+let idArray = [];
+let key = [];
+let idx = [];
+
 class FormDosen extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            selectedId: null,
+            id: null,
             ids: [],
             keys: [],
             nama: '',
@@ -26,37 +30,49 @@ class FormDosen extends React.Component {
         console.log(item.id);
         let roomId = item.id;
         // Push data id ke aray
+        this.setState({ ruangan: item })
         firebase.database().ref('/' + roomId + '/dosen').on('value', (snap) => {
-            let idArray = []
-            let idx = []
+            idArray = []
+            key = []
+            idx = []
             snap.forEach((item) => {
                 let itemVal = item.val();
                 let itemKey = item.key;
                 // console.log(itemVal);
                 // console.log(itemKey);
-                Object.assign(itemVal, { name: itemVal.id })
+                Object.assign(itemVal, { name: String(itemVal.id) })
                 console.log(itemVal)
                 idArray.push(itemVal);
-                idx.push(itemKey);
-                this.setState({ ids: idArray, keys: idx })
+                key.push(itemKey);
+                idx.push(item.val().id);
+                this.setState({ ids: idArray, keys: key })
             })
         })
-
-        this.setState({ ruangan: item })
     }
 
-    handleSubmit(selectedId, nama, nip, ruangan) {
-        console.log(selectedId);
-        console.log(nama);
-        console.log(nip);
-        console.log(ruangan);
+    handleSubmit(id, nama, nip, ruangan) {
+        let idIdx = idx.indexOf(id)
+        let keyUrl = key[idIdx]
+        let roomId = ruangan.id
+
+        firebase.database().ref('/' + roomId + '/dosen/' + keyUrl).set({
+            id,
+            nama,
+            nip,
+        })
+            .then(() => {
+                this.setState({ id: null, ids: [], keys: [], nama: '', nip: '', ruangan: '' })
+                alert('Data berhasil di Tambahkan');
+                this.props.navigation.navigate('Data');
+            })
+
     }
 
     static navigationOptions = { header: null }
 
     render() {
         const { navigation } = this.props;
-        const { ids, keys, selectedId, nama, nip, ruangan } = this.state;
+        const { ids, keys, id, nama, nip, ruangan } = this.state;
         console.log(ids);
         console.log(keys);
         // if (ids == null || keys == null) {
@@ -68,8 +84,8 @@ class FormDosen extends React.Component {
                 style={styles.container}>
                 <Text style={styles.title}>Input Data Dosen</Text>
                 <View style={styles.form}>
-                    {this.state.selectedId &&
-                        <Text style={styles.id}>ID Registrasi Dosen : {this.state.selectedId}
+                    {id &&
+                        <Text style={styles.id}>ID Registrasi Dosen : {this.state.id}
                         </Text>}
                     <Text style={styles.inputTitle}>Nama Dosen</Text>
                     <TextInput
@@ -89,29 +105,28 @@ class FormDosen extends React.Component {
                     />
                     <Text style={styles.inputTitle}>Device</Text>
                     <SearchableDropdown
-                        // onTextChange={text => console.log(text)}
+                        onTextChange={text => console.log(text)}
                         // onItemSelect={item => alert(JSON.stringify(item))}
                         onItemSelect={item => this.handleRuangan(item)}
                         textInputStyle={{
                             borderBottomColor: "#000",
                             borderBottomWidth: StyleSheet.hairlineWidth,
-                            marginBottom: 24
                         }}
                         itemStyle={styles.itemStyle}
                         itemTextStyle={{
                             color: '#222',
                         }}
                         items={items}
-                        defaultIndex={2}
+                        defaultIndex={0}
                         placeholder="Pendaftaran dilakukan di Device"
                         resetValue={false}
                         underlineColorAndroid="transparent"
                     />
-                    <Text style={styles.inputTitle}>ID Registrasi</Text>
+                    <Text style={styles.inputTitleRegistrasi}>ID Registrasi</Text>
                     <SearchableDropdown
-                        // onTextChange={text => console.log(text)}
+                        onTextChange={text => console.log(text)}
                         // onItemSelect={item => alert(JSON.stringify(item))}
-                        onItemSelect={item => this.setState({ selectedId: item.id })}
+                        onItemSelect={item => this.setState({ id: item.id })}
                         textInputStyle={{
                             borderBottomColor: "#000",
                             borderBottomWidth: StyleSheet.hairlineWidth,
@@ -121,14 +136,14 @@ class FormDosen extends React.Component {
                             color: '#222',
                         }}
                         items={ids}
-                        defaultIndex={2}
+                        defaultIndex={0}
                         placeholder="1"
                         resetValue={false}
                         underlineColorAndroid="transparent"
                     />
                     <TouchableOpacity
                         style={styles.submitBtn}
-                        onPress={() => this.handleSubmit(selectedId, nama, nip, ruangan)} >
+                        onPress={() => this.handleSubmit(id, nama, nip, ruangan)} >
                         <Text style={styles.submitText}>
                             Submit
                     </Text>
@@ -168,6 +183,12 @@ const styles = StyleSheet.create({
         color: "#000",
         fontSize: 10,
         textTransform: "uppercase"
+    },
+    inputTitleRegistrasi: {
+        color: "#000",
+        fontSize: 10,
+        textTransform: "uppercase",
+        marginTop: 24
     },
     textInput: {
         borderBottomColor: "#000",

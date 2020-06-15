@@ -21,7 +21,8 @@ class FormMataKuliah extends React.Component {
             matkul: '',
             start: '',
             end: '',
-            dosen: '',
+            dosenList: [],
+            dosen: null,
             ruangan: ''
         }
     }
@@ -34,7 +35,7 @@ class FormMataKuliah extends React.Component {
         let dayUrl = String(day);
         dayUrl = dayUrl.toLowerCase();
         console.log(dayUrl);
-        console.log(roomUrl);
+
         let url = '/' + roomUrl + '/matkul/' + dayUrl;
         console.log(url);
 
@@ -47,22 +48,38 @@ class FormMataKuliah extends React.Component {
         })
             .then(() => {
                 this.setState({ day: '', matkul: '', start: '', end: '', dosen: '', ruangan: '' })
-            })
-            .then(() => {
                 alert('Data berhasil di Tambahkan');
                 this.props.navigation.navigate('Data');
             })
     }
 
-    handleSelect(item) {
+    handleRuangan(item) {
         console.log(item);
-        // Push data Dosen to Array
-        this.setState({ ruangan: item });
+        this.setState({ ruangan: item })
+        let roomId = item.id;
+        let dosenUrl = '/' + roomId + '/dosen';
+        let objectDosen;
+
+        firebase.database().ref(dosenUrl).on('value', (snap) => {
+            dosenArr = [];
+            snap.forEach((item) => {
+                let itemVal = item.val();
+                let itemKey = item.key;
+                objectDosen = {
+                    id: itemVal.id,
+                    name: itemVal.nama
+                }
+
+                dosenArr.push(objectDosen);
+                this.setState({ dosenList: dosenArr });
+            })
+        })
     }
 
     render() {
         const { navigation } = this.props;
-        const { day, matkul, start, end, dosen, ruangan } = this.state;
+        const { day, matkul, start, end, dosen, ruangan, dosenList } = this.state;
+        console.log(dosenArr);
         return (
             <ScrollView
                 keyboardShouldPersistTaps='always'
@@ -110,7 +127,6 @@ class FormMataKuliah extends React.Component {
                         textInputStyle={{
                             borderBottomColor: "#000",
                             borderBottomWidth: StyleSheet.hairlineWidth,
-                            marginBottom: 20
                         }}
                         itemStyle={styles.itemStyle}
                         itemTextStyle={{
@@ -122,11 +138,11 @@ class FormMataKuliah extends React.Component {
                         resetValue={false}
                         underlineColorAndroid="transparent"
                     />
-                    <Text style={styles.inputTitle}>Dosen</Text>
+                    <Text style={styles.inputTitleDosen}>Dosen</Text>
                     <SearchableDropdown
                         onTextChange={text => console.log(text)}
                         // onItemSelect={item => alert(JSON.stringify(item))}
-                        // onItemSelect={item => this.setState({ ruangan: item })}
+                        // onItemSelect={item => console.log(item)}
                         onItemSelect={item => this.setState({ dosen: item })}
                         textInputStyle={{
                             borderBottomColor: "#000",
@@ -136,9 +152,9 @@ class FormMataKuliah extends React.Component {
                         itemTextStyle={{
                             color: '#222',
                         }}
-                        items={items}
+                        items={dosenArr}
                         defaultIndex={2}
-                        placeholder="Masukkan Ruangan"
+                        placeholder="Input Dosen"
                         resetValue={false}
                         underlineColorAndroid="transparent"
                     />
@@ -176,6 +192,12 @@ const styles = StyleSheet.create({
         color: "#000",
         fontSize: 10,
         textTransform: "uppercase"
+    },
+    inputTitleDosen: {
+        color: "#000",
+        fontSize: 10,
+        textTransform: "uppercase",
+        marginTop: 24
     },
     textInput: {
         borderBottomColor: "#000",
