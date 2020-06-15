@@ -70,9 +70,9 @@ class Dashboard extends React.Component {
     render() {
         const { day, date, matkulOne, matkulTwo } = this.state;
         console.log("Matkul One: ");
-        console.log(matkulOne);
+        console.log(matkulOneArr);
         console.log("Matkul Two: ");
-        console.log(matkulTwo);
+        console.log(matkulTwoArr);
         return (
             <ScrollView style={styles.container}>
                 {/* Title Section */}

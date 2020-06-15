@@ -8,38 +8,68 @@ const items = [
     { id: 2, name: 'JJ209' },
 ];
 
-let ids = []
-
 class FormDosen extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            id: null,
+            selectedId: null,
+            ids: [],
+            keys: [],
             nama: '',
             nip: '',
             ruangan: ''
         }
     }
 
-    componentDidMount() {
-        firebase.database().ref('/1/dosen').on('value', (snap) => {
-            let data = snap.val();
-            console.log(data);
+    handleRuangan(item) {
+        console.log(item.id);
+        let roomId = item.id;
+        // Push data id ke aray
+        firebase.database().ref('/' + roomId + '/dosen').on('value', (snap) => {
+            let idArray = []
+            let idx = []
+            snap.forEach((item) => {
+                let itemVal = item.val();
+                let itemKey = item.key;
+                // console.log(itemVal);
+                // console.log(itemKey);
+                Object.assign(itemVal, { name: itemVal.id })
+                console.log(itemVal)
+                idArray.push(itemVal);
+                idx.push(itemKey);
+                this.setState({ ids: idArray, keys: idx })
+            })
         })
+
+        this.setState({ ruangan: item })
+    }
+
+    handleSubmit(selectedId, nama, nip, ruangan) {
+        console.log(selectedId);
+        console.log(nama);
+        console.log(nip);
+        console.log(ruangan);
     }
 
     static navigationOptions = { header: null }
+
     render() {
         const { navigation } = this.props;
+        const { ids, keys, selectedId, nama, nip, ruangan } = this.state;
+        console.log(ids);
+        console.log(keys);
+        // if (ids == null || keys == null) {
+        //     return null;
+        // }
         return (
             <ScrollView
                 keyboardShouldPersistTaps='always'
                 style={styles.container}>
                 <Text style={styles.title}>Input Data Dosen</Text>
                 <View style={styles.form}>
-                    {this.state.id &&
-                        <Text style={styles.id}>ID Dosen Terbaru : {this.state.id}
+                    {this.state.selectedId &&
+                        <Text style={styles.id}>ID Registrasi Dosen : {this.state.selectedId}
                         </Text>}
                     <Text style={styles.inputTitle}>Nama Dosen</Text>
                     <TextInput
@@ -51,7 +81,6 @@ class FormDosen extends React.Component {
                     />
                     <Text style={styles.inputTitle}>NIP</Text>
                     <TextInput
-                        secureTextEntry
                         style={styles.textInput}
                         autoCapitalize="none"
                         placeholder="NIP"
@@ -60,9 +89,9 @@ class FormDosen extends React.Component {
                     />
                     <Text style={styles.inputTitle}>Device</Text>
                     <SearchableDropdown
-                        onTextChange={text => console.log(text)}
+                        // onTextChange={text => console.log(text)}
                         // onItemSelect={item => alert(JSON.stringify(item))}
-                        onItemSelect={item => this.setState({ ruangan: item })}
+                        onItemSelect={item => this.handleRuangan(item)}
                         textInputStyle={{
                             borderBottomColor: "#000",
                             borderBottomWidth: StyleSheet.hairlineWidth,
@@ -80,9 +109,9 @@ class FormDosen extends React.Component {
                     />
                     <Text style={styles.inputTitle}>ID Registrasi</Text>
                     <SearchableDropdown
-                        onTextChange={text => console.log(text)}
+                        // onTextChange={text => console.log(text)}
                         // onItemSelect={item => alert(JSON.stringify(item))}
-                        onItemSelect={item => this.setState({ id: item })}
+                        onItemSelect={item => this.setState({ selectedId: item.id })}
                         textInputStyle={{
                             borderBottomColor: "#000",
                             borderBottomWidth: StyleSheet.hairlineWidth,
@@ -99,7 +128,7 @@ class FormDosen extends React.Component {
                     />
                     <TouchableOpacity
                         style={styles.submitBtn}
-                        onPress={this.handleSubmit} >
+                        onPress={() => this.handleSubmit(selectedId, nama, nip, ruangan)} >
                         <Text style={styles.submitText}>
                             Submit
                     </Text>

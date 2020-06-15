@@ -10,7 +10,7 @@ const items = [
 
 const dayArr = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu", "minggu"];
 
-var dosenArr = [];
+let dosenArr = [];
 
 class FormMataKuliah extends React.Component {
     constructor(props) {
