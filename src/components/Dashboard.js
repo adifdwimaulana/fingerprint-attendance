@@ -70,9 +70,9 @@ class Dashboard extends React.Component {
     render() {
         const { day, date, matkulOne, matkulTwo } = this.state;
         console.log("Matkul One: ");
-        console.log(matkulOneArr);
+        console.log(matkulOne);
         console.log("Matkul Two: ");
-        console.log(matkulTwoArr);
+        console.log(matkulTwo);
         return (
             <ScrollView style={styles.container}>
                 {/* Title Section */}
@@ -89,7 +89,7 @@ class Dashboard extends React.Component {
                                 <Text style={styles.jadwalRuangan}>{item.ruangan}</Text>
                                 <View style={styles.dosenGroup}>
                                     <Icon name='user' size={24} style={styles.icon} />
-                                    <Text style={styles.dosen}>{item.dosen}</Text>
+                                    <Text style={styles.dosen}>{item.dosen.name}</Text>
                                 </View>
                             </View>
                         ) : <View style={styles.noContainerSatu}>
