@@ -4,8 +4,8 @@ import SearchableDropdown from 'react-native-searchable-dropdown';
 import firebase from 'firebase';
 
 const items = [
-    { id: 1, name: 'JJ208' },
-    { id: 2, name: 'JJ209' },
+    { id: 1, name: 'M105' },
+    { id: 2, name: 'M205' },
 ];
 
 const dayArr = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu", "minggu"];

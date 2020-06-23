@@ -1,29 +1,25 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 
 function Data({ navigation }) {
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Text style={styles.title}>Tambah Data</Text>
             <View style={styles.imageContainer}>
-                <View style={styles.containerMatkul}>
+                <TouchableOpacity onPress={() => navigation.navigate('FormMataKuliah')} style={styles.containerMatkul}>
                     <Image source={require('../../assets/mata-kuliah-1.png')} style={styles.imageMatkul} />
-                    <TouchableOpacity onPress={() => navigation.navigate('FormMataKuliah')}>
-                        <Text style={styles.tambah}>Mata Kuliah</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.containerDosen}>
+                    <Text style={styles.tambah}>Mata Kuliah</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('FormDosen')} style={styles.containerDosen}>
                     <Image source={require('../../assets/dosen-1.png')} style={styles.imageDosen} />
-                    <TouchableOpacity onPress={() => navigation.navigate('FormDosen')}>
-                        <Text style={styles.tambah}>Dosen</Text>
-                    </TouchableOpacity>
-                </View>
+                    <Text style={styles.tambah}>Dosen</Text>
+                </TouchableOpacity>
             </View>
             <Image
                 source={require('../../assets/bot-circle.png')}
                 style={styles.botCircle}
             />
-        </View>
+        </ScrollView>
     )
 }
 
@@ -47,47 +43,48 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         marginTop: 35,
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center'
     },
     containerMatkul: {
-        width: 160,
-        height: 160,
+        width: '70%',
+        height: 200,
         backgroundColor: '#5047ce',
         position: 'relative',
-        marginRight: 20,
-        borderRadius: 14,
-        elevation: 8,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    containerDosen: {
-        width: 160,
-        height: 160,
-        backgroundColor: '#d28e8f',
-        position: 'relative',
-        marginLeft: 20,
         borderRadius: 14,
         elevation: 8,
         justifyContent: 'center',
         alignItems: 'center',
+        marginBottom: 30
+    },
+    containerDosen: {
+        width: '70%',
+        height: 200,
+        backgroundColor: '#d28e8f',
+        position: 'relative',
+        borderRadius: 14,
+        elevation: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 30
     },
     imageMatkul: {
-        height: 102
+        width: 150
     },
     imageDosen: {
-        height: 110,
+        width: 90,
     },
     tambah: {
-        fontSize: 16,
+        fontSize: 24,
         color: '#fff',
         fontWeight: '700',
         letterSpacing: 1.2,
-        marginTop: 6
+        marginTop: 6,
+        textAlign: 'center'
     },
     botCircle: {
-        position: "absolute",
+        position: "relative",
         bottom: 0,
         left: 0,
         marginBottom: -100,

@@ -125,6 +125,13 @@ class Dashboard extends React.Component {
                                     <Icon name={'trash'} size={20} style={{ color: '#fff' }} />
                                     <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700', marginLeft: 4 }}>DELETE</Text>
                                 </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={{ flexDirection: 'row', position: 'absolute', right: 100, top: 8, zIndex: 20, alignItems: 'center' }}
+                                    onPress={() => this.handleEdit(item)}
+                                >
+                                    <Icon name={'edit'} size={20} style={{ color: '#fff' }} />
+                                    <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700', marginLeft: 4 }}>EDIT</Text>
+                                </TouchableOpacity>
                                 <Text style={styles.jadwalTitle}>{item.nama}</Text>
                                 <Text style={styles.jadwalTime}>{item.start} - {item.end} A.M.</Text>
                                 <Text style={styles.jadwalRuangan}>{item.ruangan}</Text>
@@ -135,30 +142,27 @@ class Dashboard extends React.Component {
                             </View>
                         ) : <View style={styles.noContainerSatu}>
                             <Text style={styles.noKuliah}>Tidak Ada Kuliah</Text>
-                            <Text style={styles.noRuangan}>JJ208</Text>
+                            <Text style={styles.noRuangan}>M105</Text>
                         </View>
                     }
 
                     {matkulTwo ?
                         matkulTwo.map(item =>
                             <View style={styles.jadwalContainerDua}>
-                                <View style={{ alignContent: 'flex-end', flexDirection: 'row' }}>
-                                    <TouchableOpacity
-                                        style={{ flexDirection: 'row', position: 'absolute', right: 20, top: 8, zIndex: 20, alignItems: 'center' }}
-                                        onPress={() => this.handleDelete(item)}
-                                    >
-                                        <Icon name={'trash'} size={20} style={{ color: '#fff' }} />
-                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700', marginLeft: 4 }}>DELETE</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={{ flexDirection: 'row', position: 'absolute', right: 20, top: 40, zIndex: 20, alignItems: 'center' }}
-                                        onPress={() => this.handleDelete(item)}
-                                    >
-                                        <Icon name={'trash'} size={20} style={{ color: '#fff' }} />
-                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700', marginLeft: 4 }}>EDIT</Text>
-                                    </TouchableOpacity>
-                                </View>
-
+                                <TouchableOpacity
+                                    style={{ flexDirection: 'row', position: 'absolute', right: 20, top: 8, zIndex: 20, alignItems: 'center' }}
+                                    onPress={() => this.handleDelete(item)}
+                                >
+                                    <Icon name={'trash'} size={20} style={{ color: '#fff' }} />
+                                    <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700', marginLeft: 4 }}>DELETE</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={{ flexDirection: 'row', position: 'absolute', right: 100, top: 8, zIndex: 20, alignItems: 'center' }}
+                                    onPress={() => this.handleEdit(item)}
+                                >
+                                    <Icon name={'edit'} size={20} style={{ color: '#fff' }} />
+                                    <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700', marginLeft: 4 }}>EDIT</Text>
+                                </TouchableOpacity>
                                 <Text style={styles.jadwalTitle}>{item.nama}</Text>
                                 <Text style={styles.jadwalTime}>{item.start} - {item.end} A.M.</Text>
                                 <Text style={styles.jadwalRuangan}>{item.ruangan}</Text>
@@ -169,7 +173,7 @@ class Dashboard extends React.Component {
                             </View>
                         ) : <View style={styles.noContainerDua}>
                             <Text style={styles.noKuliah}>Tidak Ada Kuliah</Text>
-                            <Text style={styles.noRuangan}>JJ209</Text>
+                            <Text style={styles.noRuangan}>M205</Text>
                         </View>
                     }
 
