@@ -1,11 +1,30 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'firebase';
 
-const dayArray = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+const dayArray = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+const monthArray = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "Nopember", "Desember"]
 let matkulOneArr = [];
 let matkulTwoArr = [];
+
+let day = new Date().getDay();
+let date = new Date().getDate();
+let month = new Date().getMonth();
+month = monthArray[month]
+const year = new Date().getFullYear();
+console.log(month)
+
+if (date < 10) {
+    date = '0' + date;
+}
+
+if (month < 10) {
+    month = '0' + month;
+}
+
+let currentDay = dayArray[day];
+let today = date + ' ' + month + ' ' + year;
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -20,25 +39,11 @@ class Dashboard extends React.Component {
     }
 
     componentDidMount() {
-        let day = new Date().getDay();
-        let date = new Date().getDate();
-        let month = new Date().getMonth();
-        const year = new Date().getFullYear();
-
-        if (date < 10) {
-            date = '0' + date;
-        }
-
-        if (month < 10) {
-            month = '0' + month;
-        }
-
-        let currentDay = dayArray[day - 1];
-        let today = date + '-' + month + '-' + year;
         this.setState({ day: currentDay, date: today })
-
         let dayUrl = currentDay.toLowerCase();
         console.log(dayUrl);
+
+        // Fetching Data
         firebase.database().ref('/1/matkul' + '/' + dayUrl).on('value', (snap) => {
             matkulOneArr = [];
             snap.forEach((item) => {
@@ -67,6 +72,35 @@ class Dashboard extends React.Component {
         });
     }
 
+    handleDelete(item) {
+        console.log(item)
+        let roomId;
+
+        if (item.ruangan == "JJ208") {
+            roomId = 1;
+        } else {
+            roomId = 2;
+        }
+        console.log(roomId)
+        let url = '/' + roomId + '/matkul/' + currentDay.toLowerCase() + '/' + item.key;
+        console.log(url)
+
+        Alert.alert(
+            //title
+            'Hi,',
+            //body
+            'Are you sure want to delete this item ?',
+            [
+                {
+                    text: 'Yes', onPress: () => firebase.database().ref(url).remove()
+                },
+                { text: 'No', style: 'cancel' },
+            ],
+            { cancelable: false }
+            //clicking out side of alert will not cancel
+        );
+    }
+
     render() {
         const { day, date, matkulOne, matkulTwo } = this.state;
         console.log("Matkul One: ");
@@ -84,6 +118,13 @@ class Dashboard extends React.Component {
                     {matkulOne ?
                         matkulOne.map(item =>
                             <View style={styles.jadwalContainerSatu}>
+                                <TouchableOpacity
+                                    style={{ flexDirection: 'row', position: 'absolute', right: 20, top: 8, zIndex: 20, alignItems: 'center' }}
+                                    onPress={() => this.handleDelete(item)}
+                                >
+                                    <Icon name={'trash'} size={20} style={{ color: '#fff' }} />
+                                    <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700', marginLeft: 4 }}>DELETE</Text>
+                                </TouchableOpacity>
                                 <Text style={styles.jadwalTitle}>{item.nama}</Text>
                                 <Text style={styles.jadwalTime}>{item.start} - {item.end} A.M.</Text>
                                 <Text style={styles.jadwalRuangan}>{item.ruangan}</Text>
@@ -101,12 +142,29 @@ class Dashboard extends React.Component {
                     {matkulTwo ?
                         matkulTwo.map(item =>
                             <View style={styles.jadwalContainerDua}>
+                                <View style={{ alignContent: 'flex-end', flexDirection: 'row' }}>
+                                    <TouchableOpacity
+                                        style={{ flexDirection: 'row', position: 'absolute', right: 20, top: 8, zIndex: 20, alignItems: 'center' }}
+                                        onPress={() => this.handleDelete(item)}
+                                    >
+                                        <Icon name={'trash'} size={20} style={{ color: '#fff' }} />
+                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700', marginLeft: 4 }}>DELETE</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={{ flexDirection: 'row', position: 'absolute', right: 20, top: 40, zIndex: 20, alignItems: 'center' }}
+                                        onPress={() => this.handleDelete(item)}
+                                    >
+                                        <Icon name={'trash'} size={20} style={{ color: '#fff' }} />
+                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700', marginLeft: 4 }}>EDIT</Text>
+                                    </TouchableOpacity>
+                                </View>
+
                                 <Text style={styles.jadwalTitle}>{item.nama}</Text>
                                 <Text style={styles.jadwalTime}>{item.start} - {item.end} A.M.</Text>
                                 <Text style={styles.jadwalRuangan}>{item.ruangan}</Text>
                                 <View style={styles.dosenGroup}>
                                     <Icon name='user' size={24} style={styles.icon} />
-                                    <Text style={styles.dosen}>{item.dosen}</Text>
+                                    <Text style={styles.dosen}>{item.dosen.name}</Text>
                                 </View>
                             </View>
                         ) : <View style={styles.noContainerDua}>
