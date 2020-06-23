@@ -76,7 +76,7 @@ class Dashboard extends React.Component {
         console.log(item)
         let roomId;
 
-        if (item.ruangan == "JJ208") {
+        if (item.ruangan == "M105") {
             roomId = 1;
         } else {
             roomId = 2;
@@ -99,6 +99,29 @@ class Dashboard extends React.Component {
             { cancelable: false }
             //clicking out side of alert will not cancel
         );
+    }
+
+    handleEdit(item) {
+        console.log(item)
+        let roomId;
+
+        if (item.ruangan == "M105") {
+            roomId = 1;
+        } else {
+            roomId = 2;
+        }
+        console.log(roomId)
+        let url = '/' + roomId + '/matkul/' + currentDay.toLowerCase() + '/' + item.key;
+        console.log(url)
+        this.props.navigation.navigate('FormEditMataKuliah', {
+            nama: item.nama,
+            day: this.state.day,
+            start: item.start,
+            end: item.end,
+            ruangan: item.ruangan,
+            key: item.key,
+            dosen: item.dosen.name
+        })
     }
 
     render() {
@@ -211,7 +234,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 17,
         marginTop: 30,
         backgroundColor: '#d28e8e',
-        height: 160,
+        height: 180,
         borderRadius: 8,
         elevation: 8,
     },
@@ -219,7 +242,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 17,
         marginTop: 30,
         backgroundColor: '#6861cf',
-        height: 160,
+        height: 180,
         borderRadius: 8,
         elevation: 8,
     },
@@ -228,7 +251,7 @@ const styles = StyleSheet.create({
         color: '#efefef',
         fontWeight: '700',
         letterSpacing: 1.2,
-        marginTop: 16,
+        marginTop: 36,
         marginLeft: 16
     },
     jadwalTime: {

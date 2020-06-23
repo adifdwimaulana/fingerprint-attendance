@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Image, View, Text } from 'react-native';
+import { ScrollView, StyleSheet, Image, View, Text, TouchableOpacity } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'firebase';
@@ -39,18 +39,18 @@ class DrawerComponent extends React.Component {
                 </View>
                 <Text style={styles.headerText}>Hi, {email}</Text>
                 <View style={styles.screenContainer}>
-                    <View style={[styles.screenStyle, (this.props.activeItemKey == 'Home') ? styles.activeBackgroundColor : null]}>
+                    <TouchableOpacity style={[styles.screenStyle, (this.props.activeItemKey == 'Home') ? styles.activeBackgroundColor : null]} onPress={this.navigateToScreen('Home')}>
                         <Icon name={'home'} size={24} style={[styles.screenIconStyle, (this.props.activeItemKey == 'Home') ? styles.selectedIconStyle : null]} onPress={this.navigateToScreen('Home')} />
-                        <Text style={[styles.screenTextStyle, (this.props.activeItemKey == 'Home') ? styles.selectedTextStyle : null]} onPress={this.navigateToScreen('Home')}>Home</Text>
-                    </View>
-                    <View style={[styles.screenStyle, (this.props.activeItemKey == 'Data') ? styles.activeBackgroundColor : null]}>
+                        <Text style={[styles.screenTextStyle, (this.props.activeItemKey == 'Home') ? styles.selectedTextStyle : null]} >Home</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.screenStyle, (this.props.activeItemKey == 'Data') ? styles.activeBackgroundColor : null]} onPress={this.navigateToScreen('Data')}>
                         <Icon name={'database'} size={24} style={[styles.screenIconStyle, (this.props.activeItemKey == 'Data') ? styles.selectedIconStyle : null]} onPress={this.navigateToScreen('Data')} />
-                        <Text style={[styles.screenTextStyle, (this.props.activeItemKey == 'Data') ? styles.selectedTextStyle : null]} onPress={this.navigateToScreen('Data')}>Data</Text>
-                    </View>
-                    <View style={[styles.screenStyle, (this.props.activeItemKey == 'Logout') ? styles.activeBackgroundColor : null]}>
+                        <Text style={[styles.screenTextStyle, (this.props.activeItemKey == 'Data') ? styles.selectedTextStyle : null]} >Data</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.screenStyle, (this.props.activeItemKey == 'Logout') ? styles.activeBackgroundColor : null]} onPress={this.navigateToScreen('Logout')}>
                         <Icon name={'sign-out'} size={24} style={[styles.screenIconStyle, (this.props.activeItemKey == 'Logout') ? styles.selectedIconStyle : null]} onPress={this.navigateToScreen('Logout')} />
-                        <Text style={[styles.screenTextStyle, (this.props.activeItemKey == 'Logout') ? styles.selectedTextStyle : null]} onPress={this.navigateToScreen('Logout')}>Logout</Text>
-                    </View>
+                        <Text style={[styles.screenTextStyle, (this.props.activeItemKey == 'Logout') ? styles.selectedTextStyle : null]} >Logout</Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         )
