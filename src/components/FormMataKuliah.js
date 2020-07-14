@@ -133,7 +133,7 @@ class FormMataKuliah extends React.Component {
                             color: '#222',
                         }}
                         items={items}
-                        defaultIndex={2}
+                        defaultIndex={0}
                         placeholder="Masukkan Ruangan"
                         resetValue={false}
                         underlineColorAndroid="transparent"
@@ -153,7 +153,7 @@ class FormMataKuliah extends React.Component {
                             color: '#222',
                         }}
                         items={dosenArr}
-                        defaultIndex={2}
+                        defaultIndex={0}
                         placeholder="Input Dosen"
                         resetValue={false}
                         underlineColorAndroid="transparent"

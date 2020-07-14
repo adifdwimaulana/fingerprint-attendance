@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, RefreshControl } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'firebase';
 
@@ -34,8 +34,53 @@ class Dashboard extends React.Component {
             day: '',
             date: '',
             matkulOne: null,
-            matkulTwo: null
+            matkulTwo: null,
+            refreshing: false
         }
+    }
+
+    _onRefresh = () => {
+        // Fetching Data
+        let dayUrl = currentDay.toLowerCase();
+        this.setState({ refreshing: true })
+        firebase.database().ref('/1/matkul' + '/' + dayUrl).once('value', (snap) => {
+            matkulOneArr = [];
+            if (snap.val() != null) {
+                snap.forEach((item) => {
+                    let itemVal = item.val();
+                    let itemKey = item.key;
+                    // console.log(itemKey);
+                    // console.log(itemVal);
+                    Object.assign(itemVal, { key: itemKey })
+                    matkulOneArr.push(itemVal);
+                    // console.log(matkulOneArr);
+                    this.setState({ matkulOne: matkulOneArr })
+                })
+            } else {
+                this.setState({ matkulOne: null })
+            }
+        }).then(() => {
+            this.setState({ refreshing: false })
+        })
+
+        firebase.database().ref('/2/matkul' + '/' + dayUrl).once('value', (snap) => {
+            matkulTwoArr = [];
+            if (snap.val() != null) {
+                snap.forEach((item) => {
+                    let itemVal = item.val();
+                    let itemKey = item.key;
+                    // console.log(itemKey);
+                    // console.log(itemVal);
+                    Object.assign(itemVal, { key: itemKey })
+                    matkulTwoArr.push(itemVal);
+                    this.setState({ matkulTwo: matkulTwoArr })
+                })
+            } else {
+                this.setState({ matkulTwo: null })
+            }
+        }).then(() => {
+            this.setState({ refreshing: false })
+        })
     }
 
     componentDidMount() {
@@ -125,13 +170,21 @@ class Dashboard extends React.Component {
     }
 
     render() {
-        const { day, date, matkulOne, matkulTwo } = this.state;
+        const { day, date, matkulOne, matkulTwo, refreshing } = this.state;
         console.log("Matkul One: ");
         console.log(matkulOne);
         console.log("Matkul Two: ");
         console.log(matkulTwo);
         return (
-            <ScrollView style={styles.container}>
+            <ScrollView
+                style={styles.container}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={this._onRefresh}
+                    />
+                }
+            >
                 {/* Title Section */}
                 <Text style={styles.title}>Jadwal</Text>
                 <Text style={styles.date}>{day}, {date}</Text>
