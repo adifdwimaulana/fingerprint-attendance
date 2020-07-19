@@ -1,14 +1,14 @@
 import firebase from 'firebase';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAobMzZQgiMzJHlaoufyfx6Z0oxffL687I",
-    authDomain: "finger-scheduler.firebaseapp.com",
-    databaseURL: "https://finger-scheduler.firebaseio.com",
-    projectId: "finger-scheduler",
-    storageBucket: "finger-scheduler.appspot.com",
-    messagingSenderId: "292392425279",
-    appId: "1:292392425279:web:e9c1672e329ce89340a58a",
-    measurementId: "G-NZN32M6NT4"
+    apiKey: "AIzaSyCoFG0RMzX3rjOrXhuPAAvTtfN5iAedoF8",
+    authDomain: "scheduler-ppns.firebaseapp.com",
+    databaseURL: "https://scheduler-ppns.firebaseio.com",
+    projectId: "scheduler-ppns",
+    storageBucket: "scheduler-ppns.appspot.com",
+    messagingSenderId: "988717085712",
+    appId: "1:988717085712:web:4671c969a2adfcf9a10695",
+    measurementId: "G-X8W3CPJW62"
 };
 
 if (!firebase.apps.length) {
