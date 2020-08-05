@@ -23,7 +23,11 @@ class FormMataKuliah extends React.Component {
             end: '',
             dosenList: [],
             dosen: null,
-            ruangan: ''
+            ruangan: null,
+            matkulError: null,
+            hariError: null,
+            startError: null,
+            endError: null,
         }
     }
 
@@ -44,7 +48,7 @@ class FormMataKuliah extends React.Component {
             nama: matkul,
             start,
             end,
-            ruangan: roomName
+            ruangan: roomName,
         })
             .then(() => {
                 this.setState({ day: '', matkul: '', start: '', end: '', dosen: '', ruangan: '' })
@@ -76,48 +80,105 @@ class FormMataKuliah extends React.Component {
         })
     }
 
+    matkulValidation() {
+        if (this.state.matkul == '') {
+            this.setState({ matkulError: "Form Mata Kuliah Tidak Boleh Kosong !" })
+        } else {
+            this.setState({ matkulError: null })
+        }
+    }
+
+    hariValidation() {
+        if (this.state.day == '') {
+            this.setState({ hariError: "Form Hari Tidak Boleh Kosong !" })
+        } else {
+            this.setState({ hariError: null })
+        }
+    }
+
+    startValidation() {
+        let reg = new RegExp('^[0-9]+$');
+        for (let char = 0; char < this.state.start.length; char++) {
+            if (this.state.start[2] != ':' || !this.state.start[0].match(reg) || !this.state.start[1].match(reg) || !this.state.start[3].match(reg) || !this.state.start[4].match(reg)) {
+                this.setState({ startError: "Format Jam Harus Sesuai Placeholder !" })
+            } else {
+                this.setState({ startError: null })
+            }
+        }
+    }
+
+    endValidation() {
+        let reg = new RegExp('^[0-9]+$');
+        for (let char = 0; char < this.state.end.length; char++) {
+            if (this.state.end[2] != ':' || !this.state.end[0].match(reg) || !this.state.end[1].match(reg) || !this.state.end[3].match(reg) || !this.state.end[4].match(reg)) {
+                this.setState({ endError: "Format Jam Harus Sesuai Placeholder !" })
+            } else {
+                this.setState({ endError: null })
+            }
+        }
+    }
+
+
     render() {
         const { navigation } = this.props;
-        const { day, matkul, start, end, dosen, ruangan, dosenList } = this.state;
+        const { day, matkul, start, end, dosen, ruangan, dosenList, matkulError, hariError, startError, endError } = this.state;
         console.log(dosenArr);
         return (
             <ScrollView
                 keyboardShouldPersistTaps='always'
                 style={styles.container}>
-                <Text style={styles.title}>Input Data Mata Kuiah</Text>
+                <Text style={styles.title}>Input Data Mata Kuliah</Text>
                 <View style={styles.form}>
                     <Text style={styles.inputTitle}>Mata Kuliah</Text>
                     <TextInput
+                        onBlur={() => this.matkulValidation()}
                         style={styles.textInput}
-                        autoCapitalize="none"
+                        autoCapitalize="true"
                         placeholder="Mata Kuliah"
                         onChangeText={matkul => this.setState({ matkul })}
                         value={matkul}
                     />
+                    {
+                        this.state.matkulError ? <Text style={{ fontSize: 12, color: 'red', marginTop: -15, marginBottom: 15 }}>{this.state.matkulError}</Text> : null
+                    }
                     <Text style={styles.inputTitle}>Hari</Text>
                     <TextInput
+                        onBlur={() => this.hariValidation()}
                         style={styles.textInput}
-                        autoCapitalize="none"
+                        autoCapitalize="true"
                         placeholder="Senin"
                         onChangeText={day => this.setState({ day })}
                         value={day}
                     />
+                    {
+                        this.state.hariError ? <Text style={{ fontSize: 12, color: 'red', marginTop: -15, marginBottom: 15 }}>{this.state.hariError}</Text> : null
+                    }
                     <Text style={styles.inputTitle}>Jam Mulai</Text>
                     <TextInput
+                        onBlur={() => this.startValidation()}
                         style={styles.textInput}
                         autoCapitalize="none"
                         placeholder="08:00"
                         onChangeText={start => this.setState({ start })}
                         value={start}
+                        maxLength={5}
                     />
+                    {
+                        this.state.startError ? <Text style={{ fontSize: 12, color: 'red', marginTop: -15, marginBottom: 15 }}>{this.state.startError}</Text> : null
+                    }
                     <Text style={styles.inputTitle}>Jam Selesai</Text>
                     <TextInput
+                        onBlur={() => this.endValidation()}
                         style={styles.textInput}
                         autoCapitalize="none"
                         placeholder="10:30"
                         onChangeText={end => this.setState({ end })}
                         value={end}
+                        maxLength={5}
                     />
+                    {
+                        this.state.endError ? <Text style={{ fontSize: 12, color: 'red', marginTop: -15, marginBottom: 15 }}>{this.state.endError}</Text> : null
+                    }
                     <Text style={styles.inputTitle}>Ruangan</Text>
                     <SearchableDropdown
                         onTextChange={text => console.log(text)}
@@ -158,13 +219,16 @@ class FormMataKuliah extends React.Component {
                         resetValue={false}
                         underlineColorAndroid="transparent"
                     />
-                    <TouchableOpacity
-                        style={styles.submitBtn}
-                        onPress={() => this.handleSubmit(day, matkul, start, end, dosen, ruangan)} >
-                        <Text style={styles.submitText}>
-                            Submit
-                    </Text>
-                    </TouchableOpacity>
+                    {
+                        matkulError || hariError || startError || endError ? null : <TouchableOpacity
+                            style={styles.submitBtn}
+                            onPress={() => this.handleSubmit(day, matkul, start, end, dosen, ruangan)}
+                        >
+                            <Text style={styles.submitText}>
+                                Submit
+                                </Text>
+                        </TouchableOpacity>
+                    }
                 </View>
             </ScrollView>
         )
