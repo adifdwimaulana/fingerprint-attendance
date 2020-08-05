@@ -23,7 +23,11 @@ class FormMataKuliah extends React.Component {
             end: '',
             dosenList: [],
             dosen: null,
-            ruangan: ''
+            ruangan: null,
+            matkulError: null,
+            hariError: null,
+            startError: null,
+            endError: null,
         }
     }
 
@@ -79,9 +83,47 @@ class FormMataKuliah extends React.Component {
         })
     }
 
+    matkulValidation() {
+        if (this.state.matkul == '') {
+            this.setState({ matkulError: "Form Mata Kuliah Tidak Boleh Kosong !" })
+        } else {
+            this.setState({ matkulError: null })
+        }
+    }
+
+    hariValidation() {
+        if (this.state.day == '') {
+            this.setState({ hariError: "Form Hari Tidak Boleh Kosong !" })
+        } else {
+            this.setState({ hariError: null })
+        }
+    }
+
+    startValidation() {
+        let reg = new RegExp('^[0-9]+$');
+        for (let char = 0; char < this.state.start.length; char++) {
+            if (this.state.start[2] != ':' || !this.state.start[0].match(reg) || !this.state.start[1].match(reg) || !this.state.start[3].match(reg) || !this.state.start[4].match(reg)) {
+                this.setState({ startError: "Format Jam Harus Sesuai Placeholder !" })
+            } else {
+                this.setState({ startError: null })
+            }
+        }
+    }
+
+    endValidation() {
+        let reg = new RegExp('^[0-9]+$');
+        for (let char = 0; char < this.state.end.length; char++) {
+            if (this.state.end[2] != ':' || !this.state.end[0].match(reg) || !this.state.end[1].match(reg) || !this.state.end[3].match(reg) || !this.state.end[4].match(reg)) {
+                this.setState({ endError: "Format Jam Harus Sesuai Placeholder !" })
+            } else {
+                this.setState({ endError: null })
+            }
+        }
+    }
+
     render() {
         const { navigation } = this.props;
-        const { day, matkul, start, end, dosen, ruangan, dosenList } = this.state;
+        const { day, matkul, start, end, dosen, ruangan, dosenList, matkulError, hariError, startError, endError } = this.state;
         console.log(dosenArr);
         return (
             <ScrollView
@@ -91,41 +133,45 @@ class FormMataKuliah extends React.Component {
                 <View style={styles.form}>
                     <Text style={styles.inputTitle}>Mata Kuliah</Text>
                     <TextInput
+                        onBlur={() => this.matkulValidation()}
                         style={styles.textInput}
-                        autoCapitalize="none"
+                        autoCapitalize="true"
                         placeholder={navigation.getParam('nama', '')}
                         onChangeText={matkul => this.setState({ matkul })}
                         value={matkul}
                     />
                     <Text style={styles.inputTitle}>Hari</Text>
                     <TextInput
+                        onBlur={() => this.hariValidation()}
                         style={styles.textInput}
-                        autoCapitalize="none"
+                        autoCapitalize="true"
                         placeholder={navigation.getParam('day', '')}
                         onChangeText={day => this.setState({ day })}
                         value={day}
                     />
                     <Text style={styles.inputTitle}>Jam Mulai</Text>
                     <TextInput
+                        onBlur={() => this.startValidation()}
                         style={styles.textInput}
                         autoCapitalize="none"
                         placeholder={navigation.getParam('start', '')}
                         onChangeText={start => this.setState({ start })}
                         value={start}
+                        maxLength={5}
                     />
                     <Text style={styles.inputTitle}>Jam Selesai</Text>
                     <TextInput
+                        onBlur={() => this.endValidation()}
                         style={styles.textInput}
                         autoCapitalize="none"
                         placeholder={navigation.getParam('end', '')}
                         onChangeText={end => this.setState({ end })}
                         value={end}
+                        maxLength={5}
                     />
                     <Text style={styles.inputTitle}>Ruangan</Text>
                     <SearchableDropdown
                         onTextChange={text => console.log(text)}
-                        // onItemSelect={item => alert(JSON.stringify(item))}
-                        // onItemSelect={item => this.setState({ ruangan: item })}
                         onItemSelect={item => this.handleRuangan(item)}
                         textInputStyle={{
                             borderBottomColor: "#000",
@@ -144,8 +190,6 @@ class FormMataKuliah extends React.Component {
                     <Text style={styles.inputTitleDosen}>Dosen</Text>
                     <SearchableDropdown
                         onTextChange={text => console.log(text)}
-                        // onItemSelect={item => alert(JSON.stringify(item))}
-                        // onItemSelect={item => console.log(item)}
                         onItemSelect={item => this.setState({ dosen: item })}
                         textInputStyle={{
                             borderBottomColor: "#000",
@@ -161,13 +205,25 @@ class FormMataKuliah extends React.Component {
                         resetValue={false}
                         underlineColorAndroid="transparent"
                     />
-                    <TouchableOpacity
+
+                    {
+                        matkulError || hariError || startError || endError ? null : <TouchableOpacity
+                            style={styles.submitBtn}
+                            onPress={() => this.handleSubmit(day, matkul, start, end, dosen, ruangan)}
+                        >
+                            <Text style={styles.submitText}>
+                                Edit
+                                </Text>
+                        </TouchableOpacity>
+                    }
+
+                    {/* <TouchableOpacity
                         style={styles.submitBtn}
                         onPress={() => this.handleSubmit(day, matkul, start, end, dosen, ruangan)} >
                         <Text style={styles.submitText}>
                             Edit
                     </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </ScrollView>
         )
