@@ -22,9 +22,13 @@ class FormDosen extends React.Component {
             keys: [],
             nama: '',
             nip: '',
-            ruangan: ''
+            ruangan: '',
+            namaError: null,
+            nipError: null
         }
     }
+
+    static navigationOptions = { header: null }
 
     handleRuangan(item) {
         console.log(item.id);
@@ -65,14 +69,29 @@ class FormDosen extends React.Component {
                 alert('Data berhasil di Tambahkan');
                 this.props.navigation.navigate('Data');
             })
-
     }
 
-    static navigationOptions = { header: null }
+    namaValidation() {
+        if (this.state.nama == '') {
+            this.setState({ namaError: "Nama Tidak Boleh Kosong !" })
+        } else {
+            this.setState({ namaError: null })
+        }
+    }
+
+    nipValidation() {
+        if (this.state.nip == '') {
+            this.setState({ nipError: "NIP Tidak Boleh Kosong !" })
+        } else {
+            this.setState({ nipError: null })
+        }
+    }
+
+
 
     render() {
         const { navigation } = this.props;
-        const { ids, keys, id, nama, nip, ruangan } = this.state;
+        const { ids, keys, id, nama, nip, ruangan, namaError, nipError } = this.state;
         console.log(ids);
         console.log(keys);
         // if (ids == null || keys == null) {
@@ -89,20 +108,29 @@ class FormDosen extends React.Component {
                         </Text>}
                     <Text style={styles.inputTitle}>Nama Dosen</Text>
                     <TextInput
+                        onBlur={() => this.namaValidation()}
                         style={styles.textInput}
                         autoCapitalize="none"
                         placeholder="Nama Lengkap"
                         onChangeText={nama => this.setState({ nama })}
                         value={this.state.nama}
                     />
+                    {
+                        this.state.namaError ? <Text style={{ fontSize: 12, color: 'red', marginTop: -15, marginBottom: 15 }}>{this.state.namaError}</Text> : null
+                    }
                     <Text style={styles.inputTitle}>NIP</Text>
                     <TextInput
+                        onBlur={() => this.nipValidation()}
                         style={styles.textInput}
                         autoCapitalize="none"
                         placeholder="NIP"
                         onChangeText={nip => this.setState({ nip })}
                         value={this.state.nip}
+                        keyboardType="numeric"
                     />
+                    {
+                        this.state.nipError ? <Text style={{ fontSize: 12, color: 'red', marginTop: -15, marginBottom: 15 }}>{this.state.nipError}</Text> : null
+                    }
                     <Text style={styles.inputTitle}>Device</Text>
                     <SearchableDropdown
                         onTextChange={text => console.log(text)}
@@ -141,13 +169,16 @@ class FormDosen extends React.Component {
                         resetValue={false}
                         underlineColorAndroid="transparent"
                     />
-                    <TouchableOpacity
-                        style={styles.submitBtn}
-                        onPress={() => this.handleSubmit(id, nama, nip, ruangan)} >
-                        <Text style={styles.submitText}>
-                            Submit
-                    </Text>
-                    </TouchableOpacity>
+                    {
+                        namaError || nipError ? null : <TouchableOpacity
+                            style={styles.submitBtn}
+                            onPress={() => this.handleSubmit(id, nama, nip, ruangan)} >
+                            <Text style={styles.submitText}>
+                                Submit
+                            </Text>
+                        </TouchableOpacity>
+
+                    }
                 </View>
             </ScrollView>
         )

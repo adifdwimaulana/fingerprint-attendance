@@ -140,6 +140,9 @@ class FormMataKuliah extends React.Component {
                         onChangeText={matkul => this.setState({ matkul })}
                         value={matkul}
                     />
+                    {
+                        this.state.matkulError ? <Text style={{ fontSize: 12, color: 'red', marginTop: -15, marginBottom: 15 }}>{this.state.matkulError}</Text> : null
+                    }
                     <Text style={styles.inputTitle}>Hari</Text>
                     <TextInput
                         onBlur={() => this.hariValidation()}
@@ -149,6 +152,9 @@ class FormMataKuliah extends React.Component {
                         onChangeText={day => this.setState({ day })}
                         value={day}
                     />
+                    {
+                        this.state.hariError ? <Text style={{ fontSize: 12, color: 'red', marginTop: -15, marginBottom: 15 }}>{this.state.hariError}</Text> : null
+                    }
                     <Text style={styles.inputTitle}>Jam Mulai</Text>
                     <TextInput
                         onBlur={() => this.startValidation()}
@@ -159,6 +165,9 @@ class FormMataKuliah extends React.Component {
                         value={start}
                         maxLength={5}
                     />
+                    {
+                        this.state.startError ? <Text style={{ fontSize: 12, color: 'red', marginTop: -15, marginBottom: 15 }}>{this.state.startError}</Text> : null
+                    }
                     <Text style={styles.inputTitle}>Jam Selesai</Text>
                     <TextInput
                         onBlur={() => this.endValidation()}
@@ -169,6 +178,9 @@ class FormMataKuliah extends React.Component {
                         value={end}
                         maxLength={5}
                     />
+                    {
+                        this.state.endError ? <Text style={{ fontSize: 12, color: 'red', marginTop: -15, marginBottom: 15 }}>{this.state.endError}</Text> : null
+                    }
                     <Text style={styles.inputTitle}>Ruangan</Text>
                     <SearchableDropdown
                         onTextChange={text => console.log(text)}
